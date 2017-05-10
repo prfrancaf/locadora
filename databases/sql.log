@@ -1,0 +1,84 @@
+timestamp: 2017-05-09T23:37:09.779753
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512)
+);
+success!
+timestamp: 2017-05-09T23:37:09.788231
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-05-09T23:37:09.794262
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
+);
+success!
+timestamp: 2017-05-09T23:37:09.806566
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2017-05-09T23:37:09.812680
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2017-05-09T23:37:09.819136
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    created_on TIMESTAMP,
+    service CHAR(512),
+    ticket CHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2017-05-09T23:37:09.825735
+CREATE TABLE filmes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titulo CHAR(512),
+    lancamento INTEGER,
+    duracao INTEGER,
+    generos TEXT,
+    diretor CHAR(512),
+    capa CHAR(512)
+);
+success!
+timestamp: 2017-05-09T23:37:09.836597
+CREATE TABLE items_estoque(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    filme INTEGER REFERENCES filmes (id) ON DELETE CASCADE  ,
+    quantidade INTEGER,
+    preco DOUBLE
+);
+success!
+timestamp: 2017-05-09T23:37:09.842920
+CREATE TABLE locacoes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    filmes TEXT,
+    cliente INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    data_locacao TIMESTAMP,
+    data_devolucao TIMESTAMP,
+    multa DOUBLE
+);
+success!
