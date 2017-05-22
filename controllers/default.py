@@ -58,6 +58,7 @@ def call():
     """
     return service()
 
+@auth.requires_membership('funcionario')
 def novo_filme():
     form = SQLFORM(Filmes)
     if form.process().accepted:
@@ -68,3 +69,24 @@ def novo_filme():
     else:
         response.flash = 'Preencha o formulário!'
     return dict(form=form)
+
+def ver_filmes():
+    grid = SQLFORM.grid(Filmes)
+    return dict(grid=grid)
+
+def editar_filme():
+    form = SQLFORM(Filmes, request.args(0, cast=int))
+    if form.process().accepted:
+        session.flash = 'Filme atualizado: %s' % form.vars.titulo
+        redirect(URL('ver_filmes'))
+    elif form.errors:
+        response.flash = 'Erros no formulário!'
+    else:
+        if not response.flash:
+            response.flash = 'Preencha o formulário!'
+    return dict(form=form)
+
+def apagar_filme():
+    db(Filmes.id==request.args(0, cast=int)).delete()
+    session.flash = 'Filme apagado!'
+    redirect(URL('ver_filmes'))
